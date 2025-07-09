@@ -1,49 +1,56 @@
-let shareCount = 0;
-const shareBtn = document.getElementById('whatsappBtn');
-const shareText = document.getElementById('shareCount');
+// === Variables ===
+let shareCount = Number(localStorage.getItem("shareCount")) || 0;
+
 const form = document.getElementById('registrationForm');
+const whatsappBtn = document.getElementById('whatsappBtn');
+const shareCountDisplay = document.getElementById('shareCount');
 const submitBtn = document.getElementById('submitBtn');
 const thankYou = document.getElementById('thankYouMessage');
 
-// Check if already submitted
+// === Prevent Resubmission ===
 const isSubmitted = localStorage.getItem("submitted");
 if (isSubmitted) {
   form.style.display = "none";
   thankYou.style.display = "block";
+} else {
+  shareCountDisplay.innerText = `Click count: ${shareCount}/5`;
 }
 
-// WhatsApp sharing logic
-shareBtn.addEventListener('click', () => {
+// === WhatsApp Share Button ===
+whatsappBtn.addEventListener('click', () => {
   if (shareCount < 5) {
     shareCount++;
+    localStorage.setItem("shareCount", shareCount);
 
     const message = encodeURIComponent("Hey Buddy, Join Tech For Girls Community!");
     const whatsappURL = `https://wa.me/?text=${message}`;
     window.open(whatsappURL, "_blank");
 
-    shareText.innerText = `Click count: ${shareCount}/5`;
+    shareCountDisplay.innerText = `Click count: ${shareCount}/5`;
 
     if (shareCount === 5) {
-      alert("Sharing complete. Please continue.");
+      alert("✅ Sharing complete. You may now submit the form.");
     }
+  } else {
+    alert("✅ Already shared 5 times.");
   }
 });
 
-// Form submission logic
+// === Form Submission ===
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   if (shareCount < 5) {
-    alert("Please complete sharing 5 times before submitting.");
+    alert("❌ Please share 5 times on WhatsApp before submitting.");
     return;
   }
 
   submitBtn.disabled = true;
 
-  const name = document.getElementById('name').value;
-  const phone = document.getElementById('phone').value;
-  const email = document.getElementById('email').value;
-  const college = document.getElementById('college').value;
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const college = document.getElementById('college').value.trim();
   const screenshotFile = document.getElementById('screenshot').files[0];
   const screenshotName = screenshotFile ? screenshotFile.name : "Not uploaded";
 
@@ -59,24 +66,18 @@ form.addEventListener('submit', async (e) => {
   try {
     await fetch(uploadURL, {
       method: "POST",
-      body: formData,
+      body: formData
     });
 
-    // Save submission flag
     localStorage.setItem("submitted", true);
+    localStorage.removeItem("shareCount");
 
-    // Show thank-you message
     form.reset();
     form.style.display = "none";
     thankYou.style.display = "block";
-
   } catch (error) {
-    alert("❌ Submission failed. Please try again.");
-    console.error("Error:", error);
+    console.error("Submission error:", error);
+    alert("❌ Error submitting the form. Please try again.");
     submitBtn.disabled = false;
   }
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> a3b3cb7c2d58ea9cd05fb772592101de2ad0d21c
