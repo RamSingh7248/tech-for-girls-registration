@@ -1,6 +1,7 @@
-// === Variables ===
+// === Initial Share Count ===
 let shareCount = Number(localStorage.getItem("shareCount")) || 0;
 
+// === DOM Elements ===
 const form = document.getElementById('registrationForm');
 const whatsappBtn = document.getElementById('whatsappBtn');
 const shareCountDisplay = document.getElementById('shareCount');
@@ -29,10 +30,10 @@ whatsappBtn.addEventListener('click', () => {
     shareCountDisplay.innerText = `Click count: ${shareCount}/5`;
 
     if (shareCount === 5) {
-      alert("✅ Sharing complete. You may now submit the form.");
+      alert("✅ Sharing complete. You can now submit the form.");
     }
   } else {
-    alert("✅ Already shared 5 times.");
+    alert("✅ You’ve already shared 5 times.");
   }
 });
 
@@ -41,7 +42,7 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   if (shareCount < 5) {
-    alert("❌ Please share 5 times on WhatsApp before submitting.");
+    alert("❌ Please share 5 times before submitting the form.");
     return;
   }
 
@@ -61,7 +62,7 @@ form.addEventListener('submit', async (e) => {
   formData.append("college", college);
   formData.append("screenshot", screenshotName);
 
-  const uploadURL = "https://script.google.com/macros/s/AKfycbw0plP2QytDjLh4yJypYMDlDa1hKgz8itfW96IvtV3pRXTtYKbrDGpDtR5ouCD7lrNe/exec";
+  const uploadURL = "https://script.google.com/macros/s/AKfycbwk9IW526h7oyaDNSzAGAI92p3LianUGMS9UppelEvAFm6Cq8A8C4mzDWll4tp_tWEg/exec";
 
   try {
     await fetch(uploadURL, {
