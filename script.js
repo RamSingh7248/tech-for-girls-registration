@@ -78,7 +78,7 @@ form.addEventListener('submit', async (e) => {
     thankYou.style.display = "block";
   } catch (error) {
     console.error("Submission error:", error);
-    alert("❌ Error submitting the form. Please try again.");
+    alert("❌ Error submitting the form. Please try again .");
     submitBtn.disabled = false;
   }
 });
